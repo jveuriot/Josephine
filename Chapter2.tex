@@ -1,0 +1,87 @@
+\label{ch:ch2}
+
+\section{Introduction}
+
+In order to understand how to successfully design a digital, decentralised cryptocurrency system, such as Bitcoin, it is useful to first define an electronic, centralised system. By defining such a system first, we can from there start changing elements step-by-step to eventually describe the protocol behind the Bitcoin network. As mentioned in chapter \ref{ch:intro}, the main motivation to switch to decentralised systems is that one would no longer need to trust some central authority. The main challenge is then to design the decentralised system in such a way that safety is guaranteed, and more specifically, that double-spending is prevented \cite{Nakamoto2008Bitcoin}. The Bitcoin protocol brilliantly overcomes this problem by introducing the so-called Proof-Of-Work algorithm, which will be explained after the basics of the protocol are described. This idea revolutionised the field of distributed computing [check]. In this chapter alternative cryptocurrencies and their consensus mechanisms, using for example Proof-of-Stake, are also studied, as this will be of importance for later chapters. At the end of this chapter, a list of useful definitions is included.
+
+\section{Electronic centralised cryptocurrencies}
+
+Image of chain, more research on digital money vs. electronic payments of conventional money (also exists in physical form), work out appendix on elliptic curve cryptography (locking and unlocking script)
+
+\bigbreak
+
+Electronic cryptocurrency systems are made possible by the development of cryptography. Two important factors to consider in order to trust any payment system are 1) the authenticity of the money, 2) control of ownership, such that only the owner can spend his money and no one else can claim to own this money instead. The second factor is also known as the double-spending problem. While physical money relies on advanced printing methods to secure authenticity and benefits from the physical property to avoid double-spending, electronic money is based on the use of digital signatures provided by public-key cryptography. Digital signatures are required to make sure that the system provides control of ownership, which overcomes the double-spending problem as all digital signatures are checked by a central authority. Since cryptography is not the focus of this dissertation, Appendix \ref{ch:appendix1} describes the public-key cryptography, elliptic-curve cryptography, used in the Bitcoin protocol.
+
+\section{The Bitcoin protocol}
+
+As mentioned in \cite{Nakamoto2008Bitcoin}, designing a decentralised cryptocurrency system requires the use of digital signatures, but the system does not safely operate unless the double-spending problem is overcome without depending on a central authority. This section outlines the basic properties of the Bitcoin protocol, and most importantly, explains how the Bitcoin protocol guarantees its safety.
+
+\bigbreak
+
+High-level explanation about network
+
+\subsection{Transactions}
+
+Can include more math, for example to use definitions/figures, stress importance of reaching consensus
+
+\bigbreak
+
+A transaction is essentially a change of ownership, where the current owner signs bitcoins over to the next owner. In the Bitcoin network, these bitcoins were previously received by the current owner and can be seen as previous 'transaction outputs' which serve as the input of a new transaction. The bitcoins that a user owns at some point in time are then received transaction outputs, or 'sources', that s/he has not yet spent. Clearly, a transaction requires the current owner to provide proof of ownership in the form of a digital signature. The digital signature depends on a user's private key and transaction outputs that were earlier received by the current owner [check]. It is easy for all users in the network to validate proofs of ownership. Appendix \ref{ch:appendix1} thoroughly explains how these features work. All transactions are propagated to all users, as the decentralised Bitcoin network requires all users to verify each transaction. Users are typically connected to [...] other users, and in order to reach the entire network, a transaction is sent to all connected nodes. Before sending out any transaction, a user first validates the transaction by checking several criteria. Most importantly, if the transaction output used as input for this transaction cannot be found or is already spent, the transaction is rejected. This explains why all transactions have to be propagated to all users. On average, it takes [...] seconds to reach [...] percent of the network \cite{Decker2013InfoProp}. Note that a transaction does not contain any private information, which allows Bitcoin to use communication channel/network to transport its transactions [elaborate and check]. The network thus keeps track of what happens to all coins in the network by recording the chain of ownership. One can imagine that when two transaction outputs are spent almost simultaneously, then some users might receive and validate one transaction first, while others might reject this transaction, as they received the other first. It is thus not trivial for the network to agree on a single chain of ownership. In order for the network to reach consensus on a single order of transactions, the Bitcoin protocol creates and propagates 'blocks' that contain transactions, at regular intervals.
+
+\subsection{Blocks}
+
+Genesis block, Merkle Trees, block message (InfoProp)
+
+\bigbreak
+
+The Bitcoin protocol does not work with individual transactions, but rather processes them in sets and stores them in blocks. The 'universal public ledger' that keeps track of what happens to all coins in the network is therefore also referred to as the 'blockchain'. All users in the network store the blockchain, which is continuously updated. For each block of transactions, a unique predecessor is defined. This unique predecessor is known as the parent block.
+
+\subsection{Proof-of-Work}
+
+Hash functions (what exactly is input), can elaborate on mining rewards and currency supply
+
+\bigbreak
+
+In order to add a new block of transactions to the blockchain, a block has to be 'mined' by so-called 'miners'. Miners are users in the network that wish to add new blocks to the chain, for which they receive a reward. In order to add a block, miners have to provide a 'Proof-of-Work', which is the outcome of a cryptographic puzzle. This task requires much computational power, which miners provide in exchange for their (possible) reward. The process is referred to as 'mining', since the reward consists of newly created coins for each block and transaction fees for each transaction included in the block. The monetary supply of Bitcoin thus happens through the act of mining. We will see that the mining system is crucial to guarantee Bitcoin's security, and allows the network to reach consensus without a trusted third party.
+
+\bigbreak
+
+The Proof-of-Work algorithm makes use of a hash function, the SHA-256 [source, explain]. Let us assume that all miners have access to a hash function $h(m)$. Hash functions take as input data of arbitrary length and return output data of fixed length, such that finding two messages, $m$, $m'$, which result in the same output, $h(m)$, $h(m')$, is computationally infeasible \cite{Gilbert2003Hash}. The function therefore essentially produces random strings, as modifying a small amount of data will typically result in a very different outcome [source, comment on pseudorandomness, comment on predictable amount of CPU power]. The function is also deterministic [can list characteristics instead], such that a similar input will always result in the same output. The outcome of the hash function is compared to a target hash value. Since the hash function operates as a random string generator such that no pattern can be found, the only way to meet the target hash value is by iterating through 'nonces' that vary the input. When the target value is met, a miner is allowed to add a new block of transactions to the blockchain. [What power does miner exactly have: can decide which transactions]. The faster a miner can iterate through these nonces, the higher the probability that the target is met. The probability of successfully mining a block is thus proportional to the amount of computational power \cite{Brown2018Formal}.
+
+\subsection{Keys}
+
+Explain a bit more about keys and then refer to Appendix?
+
+\subsection{Network topology}
+
+\subsection{Security}
+
+Attacks: denial-of-service, double spending (Miller2015topology)
+
+\section{Alternative cryptocurrencies and consensus mechanisms}
+\subsection{Proof-of-Stake}
+\subsection{Byzantine consensus mechanisms}
+
+\section{List of definitions}
+
+\begin{itemize}
+	\item{Transaction}
+	\begin{itemize}
+		\item{Valid transaction}
+		Miller2015topology
+		\item{Conflicting transaction}
+	\end{itemize}
+	\item{Block}
+	\item{Digital signature}
+	\item{Proof-Of-Work}
+	\item{Public-key cryptography}
+	\item{Proof-Of-Stake}
+	\item{Block size}
+	\item{Block interval}
+	\item{Miner}
+	\item{Blockchain}
+	\item{Universal ledger} See Blockchain
+	\item{Double-spending problem}
+	\item{Consensus}
+	\item{Electronic currency}
+\end{itemize}
